@@ -1,0 +1,55 @@
+{
+  "name": "loop-now-plugin-open-design",
+  "version": "0.1.0",
+  "description": {
+    "zh-CN": "让 Agent 通过 Open Design 桌面版的 MCP 服务器生成和修改设计稿、网页原型、演示稿与图片，并读取项目文件。生成用 Open Design 自己的运行时。",
+    "en-US": "Let Agents have the Open Design desktop app generate and refine designs, web prototypes, decks and images through its MCP server, and read project files. Generation runs on Open Design's own runtime."
+  },
+  "keywords": [
+    "loop-now-plugin",
+    "pi-package",
+    "open-design"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AI-for-anyone/loop-now-plugin-open-design.git"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.21.0"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 test/*.test.ts",
+    "validate": "node ../loop-now/plugins/host/dist/main.js validate ."
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  },
+  "loopNow": {
+    "id": "open-design",
+    "displayName": "Open Design",
+    "mcpServers": {
+      "desktop": {
+        "command": "node",
+        "args": ["./mcp/launch.mjs"],
+        "exposure": "direct",
+        "timeout": 120,
+        "description": "Open Design 桌面版的 MCP 服务器：建项目、委托 Open Design 生成或修改设计（start_run，由 Open Design 自己的运行时完成，一次 5 到 30 分钟）、查进度、读取和拉取项目文件，以及设计系统与 Skill 资源。需要 Loop Now 所在机器上开着 Open Design 桌面版。"
+      }
+    },
+    "configSchema": {
+      "type": "object",
+      "properties": {
+        "mcpServer": {
+          "type": "string",
+          "title": "Open Design 的 MCP 配置",
+          "description": "在 Open Design 桌面版的 Settings › OpenDesign MCP 里选 Cursor 或 Kiro CLI，复制它给出的 JSON（以 {\"mcpServers\" 开头），整段粘贴到这里；Claude Code 那一页的 claude mcp add-json 命令也可以整行粘贴。其中的 command 必须是绝对路径：macOS 自带的 /usr/bin/od 会遮住 Open Design 的 od 命令，所以不能只写 od。Open Design 更新或换了位置后，重新复制一次。"
+        }
+      }
+    }
+  }
+}
