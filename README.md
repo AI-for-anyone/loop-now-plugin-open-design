@@ -11,7 +11,7 @@ It is an Agent-only plugin: one Skill, one MCP server entry, and one setting whe
 - **Open Design generates with its own runtime, not with Loop Now's models.** A design is made by whatever Open Design is set up to use: a coding agent CLI on that machine (Claude Code, Codex, Cursor, OpenCode, Pi and others) or OpenDesign Cloud. The model accounts you set up for Pi in Loop Now are not used. The runtime is configured, and billed, separately. The simplest choice is Claude Code: if it is installed and signed in on that machine, Open Design finds it on the PATH.
 - **Open Design must be running** on the machine where Loop Now runs whenever an Agent uses it, so keep the desktop app open. If it is closed, Open Design's MCP server tries to start Open Design in the background, without a window, and waits up to a minute for it. Open Design then keeps running in the background after the Agent is done.
 - **A run takes 5 to 30 minutes.** The Agent checks on it every 30 to 60 seconds and tells you when it is done.
-- **Open Design collects usage data by default.** On first launch it asks you to choose **Share** or **Don't share**. Official builds also always send scrubbed crash and reliability reports. See Open Design's [privacy page](https://github.com/nexu-io/open-design/blob/main/PRIVACY.md).
+- **Open Design shares usage data and conversation content by default.** On first launch it asks you to choose **Share** or **Don't share**. **Share** turns on two settings: **Anonymous metrics** (run counts, token usage, error rate, duration) and **Conversation and tool content**. The second sends prompts, responses, and tool input and output to the Open Design team, truncated and with secrets stripped. They are kept in Langfuse, a cloud service for recording model calls. The generated files themselves are not sent. Design requests sent through this plugin are included. Before you use Open Design with real project content, we recommend turning off **Conversation and tool content** under **Settings › Privacy**. Official builds also always send scrubbed crash and reliability reports. See Open Design's [privacy page](https://github.com/nexu-io/open-design/blob/main/PRIVACY.md).
 - **Open Design does not produce .pptx or .pdf files through MCP.** Decks come out as HTML; you export PPTX or PDF yourself in the Open Design app.
 
 ## Requirements
@@ -23,7 +23,7 @@ It is an Agent-only plugin: one Skill, one MCP server entry, and one setting whe
 ## 1. Set up Open Design
 
 1. Download the desktop app from [open-design.ai](https://open-design.ai) or [GitHub Releases](https://github.com/nexu-io/open-design/releases) and install it.
-2. On first launch, choose **Share** or **Don't share** in the privacy banner. You can change this later under **Settings › Privacy**.
+2. On first launch, choose **Share** or **Don't share** in the privacy prompt; see the privacy note in **Before you start**. You can change this later under **Settings › Privacy**.
 3. Choose a runtime: **Settings › Models & providers**. Under **Local CLI**, Open Design lists the coding agent CLIs it found on the PATH; if yours is missing, make sure its folder is on the PATH of the app and click **Rescan**. Alternatively, sign in to OpenDesign Cloud.
 4. Make one small design in the app, to be sure the runtime works.
 
@@ -93,6 +93,7 @@ Open Design's design systems and skills are also offered as MCP resources (`od:/
   On macOS you can pipe the clipboard instead: `pbpaste | node <plugin folder>/mcp/launch.mjs --check`. It prints `[open-design] 可以使用：…` ("can be used") when the configuration is fine, or a message starting with `[open-design]` that says what to fix. `<plugin folder>` is where the plugin is installed: `<work root>/platform/plugins/open-design/<version>`, or the folder you chose for a local install. Once fixed, the tools appear the next time the Agent's Pi starts.
 - **"daemon not reachable"** or **"cannot be launched"**: Open Design is not running and could not be started in the background. Open the desktop app and ask again. If the Agent has no Open Design tools at all after this, they appear the next time its Pi starts.
 - **Open Design has no runtime**: `list_agents` comes back empty. Set one up in Open Design (step 1); Claude Code is the simplest.
+- **Pi is listed as "Pi · Inflection chat CLI"** under **Local CLI**: the label is Open Design's mistake. It is the `pi` command on that machine, the same program Loop Now runs. Open Design starts it separately, with the model chosen for it in Open Design, not the Agent's model in Loop Now.
 - **A run seems stuck**: 5 to 30 minutes is normal, and files may not change for a while. Ask the Agent to cancel only if you want to stop it.
 - **A recharge link**: OpenDesign Cloud is out of credits. Top up, tell the Agent, and it resumes the same run.
 - Open Design's own MCP server stops after 30 minutes without calls; the next call starts it again.

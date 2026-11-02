@@ -11,7 +11,7 @@
 - **Open Design 用它自己的运行时生成，不用 Loop Now 里的模型。** 设计由 Open Design 那边配置的运行时完成：那台机器上的命令行编码 Agent（Claude Code、Codex、Cursor、OpenCode、Pi 等），或 OpenDesign Cloud。你在 Loop Now 里给 Pi 配的模型账号不会被用到，运行时要单独配置、单独计费。最省事的是 Claude Code：那台机器上装好并登录了，Open Design 就能在 PATH 上找到它。
 - **Agent 使用时 Open Design 必须在运行**，所以请开着桌面版。它没开时，Open Design 的 MCP 服务器会尝试在后台、不带窗口地启动 Open Design，最多等一分钟；之后即使 Agent 用完了，它也继续在后台运行。
 - **一次运行要 5 到 30 分钟。** Agent 每隔 30 到 60 秒查一次进度，做完告诉你。
-- **Open Design 默认收集使用数据。** 第一次启动时会让你选 **Share**（分享）或 **Don't share**（不分享）。官方版本另外总会发送脱敏的崩溃与可靠性报告。详见 Open Design 的[隐私说明](https://github.com/nexu-io/open-design/blob/main/PRIVACY.md)。
+- **Open Design 默认分享使用数据和对话内容。** 第一次启动时会让你选 **分享**（Share）或 **不分享**（Don't share）。选“分享”会同时打开两项：**匿名指标**（Anonymous metrics：运行次数、token 用量、错误率、耗时）和 **对话和工具内容**（Conversation and tool content）。后者把提示词、回复和工具的输入输出截断、去掉密钥等敏感信息后发给 Open Design 团队，存在 Langfuse（一个记录大模型调用的云服务）里；生成的文件本身不发送。通过本插件发出的设计需求也在其中。用真实项目的内容之前，建议在 **设置 › 隐私**（Settings › Privacy）里关闭 **对话和工具内容**。官方版本另外总会发送脱敏的崩溃与可靠性报告。详见 Open Design 的[隐私说明](https://github.com/nexu-io/open-design/blob/main/PRIVACY.md)。
 - **Open Design 不通过 MCP 产出 .pptx 或 .pdf 文件。** 演示稿是 HTML 版；要 PPTX 或 PDF，由你在 Open Design 里导出。
 
 ## 需要
@@ -23,7 +23,7 @@
 ## 1. 准备 Open Design
 
 1. 从 [open-design.ai](https://open-design.ai) 或 [GitHub Releases](https://github.com/nexu-io/open-design/releases) 下载并安装桌面版。
-2. 第一次启动时，在隐私提示里选 **Share** 或 **Don't share**。以后可以在 **Settings › Privacy** 里改。
+2. 第一次启动时，在隐私提示里选 **分享**（Share）或 **不分享**（Don't share），见“开始之前”里关于隐私的一条。以后可以在 **设置 › 隐私**（Settings › Privacy）里改。
 3. 选运行时：**Settings › Models & providers**。**Local CLI** 下列出 Open Design 在 PATH 上找到的命令行编码 Agent；没找到你的，确认它所在的目录在 Open Design 的 PATH 里，再点 **Rescan**。也可以登录 OpenDesign Cloud。
 4. 在 Open Design 里先做一个小设计，确认运行时能用。
 
@@ -93,6 +93,7 @@ Open Design 的设计系统和 Skill 还以 MCP 资源提供（`od://design-syst
   macOS 上也可以直接读剪贴板：`pbpaste | node <插件目录>/mcp/launch.mjs --check`。配置没问题时打印 `[open-design] 可以使用：…`，否则打印一条以 `[open-design]` 开头、说明怎么改的消息。`<插件目录>` 是插件的安装位置：`<work root>/platform/plugins/open-design/<版本>`；从本地目录安装的，就是你选的那个目录。改好后，工具在该 Agent 下次启动 Pi 时出现。
 - **“daemon not reachable”或“cannot be launched”**：Open Design 没在运行，也没能在后台启动。打开桌面版再问一次。如果这之后 Agent 仍然完全没有 Open Design 的工具，它们会在该 Agent 下次启动 Pi 时出现。
 - **Open Design 没有运行时**：`list_agents` 返回空列表。在 Open Design 里配一个（第 1 步），Claude Code 最省事。
+- **Local CLI 里 Pi 显示为“Pi · Inflection chat CLI”**：这是 Open Design 标错了。它就是那台机器上的 `pi` 命令，和 Loop Now 运行的是同一个程序。Open Design 单独启动它，用在 Open Design 里给它选的模型，不用 Loop Now 里 Agent 的模型。
 - **一次运行像是卡住了**：5 到 30 分钟是正常的，文件可能有一阵子不变。只有想停下时才让 Agent 取消。
 - **收到充值链接**：OpenDesign Cloud 的额度用完了。充值后告诉 Agent，它会接着跑同一次运行。
 - Open Design 自己的 MCP 服务器在 30 分钟没有调用后会退出，下一次调用会重新启动它。
