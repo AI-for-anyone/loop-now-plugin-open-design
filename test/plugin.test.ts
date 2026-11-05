@@ -143,10 +143,10 @@ async function runLauncher(env: Record<string, string>): Promise<{ code: number 
 }
 
 describe('清单与 Skill', () => {
-  it('只有 Agent 半边：一个 Skill 目录和经启动器的 Open Design MCP 服务器，一个配置项，没有平台半边与权限', () => {
+  it('只有 Agent 侧：一个 Skill 目录和经启动器的 Open Design MCP 服务器，一个配置项，没有平台侧与权限', () => {
     const ln = pkg.loopNow
     assert.equal(ln.id, 'open-design')
-    assert.equal(pkg.version, '0.1.1')
+    assert.equal(pkg.version, '0.1.2')
     for (const key of ['platform', 'permissions', 'events', 'accounts', 'bin', 'channels']) assert.equal(ln[key], undefined, key)
     assert.deepEqual(pkg.pi, { skills: ['./skills'] })
     assert.deepEqual(Object.keys(ln.mcpServers), ['desktop'])

@@ -4,7 +4,7 @@
 
 一个 [Loop Now](https://github.com/AI-for-anyone/loop-now) 插件：让 Agent 通过 **Open Design 桌面版的 MCP 服务器** 使用 [Open Design](https://open-design.ai)。Agent 可以让 Open Design 生成和修改网页、产品原型、落地页、演示稿、图片和动效，也可以读取设计的文件、把它们复制进 Loop Now 的文件夹，以及读取 Open Design 的设计系统。
 
-它只有 Agent 半边：一个 Skill、一条 MCP 服务器声明，以及一个用来粘贴 Open Design MCP 配置的配置项。Skill 告诉 Agent 怎么委托 Open Design 做设计、要等多久、什么时候停下来问你。插件在 Loop Now 里不需要任何权限或账号。
+它只有 Agent 侧：一个 Skill、一条 MCP 服务器声明，以及一个用来粘贴 Open Design MCP 配置的配置项。Skill 告诉 Agent 怎么委托 Open Design 做设计、要等多久、什么时候停下来问你。插件在 Loop Now 里不需要任何权限或账号。
 
 ## 开始之前
 
